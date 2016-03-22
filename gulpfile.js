@@ -6,63 +6,39 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var uglifycss = require('gulp-uglifycss');
-var rename = require('gulp-rename');
-var imagemin = require('gulp-imagemin');
-var jpegtran = require('imagemin-jpegtran');
-var jpegoptim = require('imagemin-jpegoptim');
 
 gulp.task('js', function () {
-    gulp.src(['js/*.js', '!js/*-min.*'])
+    gulp.src('js/*.js')
         .pipe(uglify())
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('js'));
+        .pipe(gulp.dest('dist/js'));
 
-    gulp.src(['views/js/*.js', '!views/js/*-min.*'])
+    gulp.src('views/js/*.js')
         .pipe(uglify())
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('views/js'));
+        .pipe(gulp.dest('dist/views/js'));
 });
 
 gulp.task('css', function () {
-    gulp.src(['css/*.css', '!css/*-min.*'])
+    gulp.src('css/*.css')
         .pipe(uglifycss())
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('css'));
+        .pipe(gulp.dest('dist/css'));
 
-    gulp.src(['views/css/*.css', '!views/css/*-min.*'])
+    gulp.src('views/css/*.css')
         .pipe(uglifycss())
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('views/css'));
+        .pipe(gulp.dest('dist/views/css'));
 });
 
-gulp.task('image', function () {
-    gulp.src(['img/*.*', '!img/*-min.*'])
-        .pipe(imagemin({
-            progressive: true,
-            use: [jpegoptim({ progressive: true, size: 10 })()]
-        }))
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('img'));
+gulp.task('dist', function () {
+    gulp.src('views/*.html')
+        .pipe(gulp.dest('dist/views'));
 
-    gulp.src(['views/images/*.*', '!views/images/*-min.*'])
-        .pipe(imagemin({
-            progressive: true,
-            use: [jpegoptim({ progressive: true, size: 10})()]
-        }))
-        .pipe(rename({
-            suffix: "-min"
-        }))
-        .pipe(gulp.dest('views/images'));
+    gulp.src('views/images/**/*')
+        .pipe(gulp.dest('dist/views/images'));
+
+    gulp.src('*.html')
+        .pipe(gulp.dest('dist'));
+
+    gulp.src('img/**/*')
+        .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('default', ['js', 'css', 'image']);
+gulp.task('default', ['js', 'css', 'dist']);
