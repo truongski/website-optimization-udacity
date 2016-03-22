@@ -3,7 +3,7 @@
 ## Build instructions
 
 1. Run gulp to compress and copy source files into dist/.
-2. Test index.html and pizza.html inside of dist/.
+2. Test production code inside of dist/.
 
 ### Optimizations in main.js
 
