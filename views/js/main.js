@@ -497,21 +497,47 @@ function logAverageFrame(times) {   // times is the array of User Timing measure
 // The following code for sliding background pizzas was pulled from Ilya's demo found at:
 // https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 
+// Sine lookup table used to lower calculation time by ~20%.
+var sineLookupInDegrees = [];
+
+function lookupSine(radian) {
+    function radianToDegree(radian) {
+        return 180 * (radian / Math.PI);
+    }
+
+    var degree = Math.round(radianToDegree(radian)) % 360;
+    return sineLookupInDegrees[degree];
+};
+
+// Create sine lookup table
+(function () {
+    function degreeToRadian(degree) {
+        return Math.PI * (degree / 180);
+    }
+
+    for (var i = 0; i < 360; i++)
+    {
+        sineLookupInDegrees[i] = Math.sin(degreeToRadian(i));
+    }
+})()
+
 // Moves the sliding background pizzas based on scroll position
 function updatePositions() {
   frame++;
   window.performance.mark("mark_start_frame");
 
   var items = document.querySelectorAll('.mover');
+  var scrollTop = (document.body.scrollTop / 1250);
   for (var i = 0; i < items.length; i++) {
-    var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+      var phase = lookupSine(scrollTop + (i % 5));
+      items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
   }
 
   // User Timing API to the rescue again. Seriously, it's worth learning.
   // Super easy to create custom metrics.
   window.performance.mark("mark_end_frame");
   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  
   if (frame % 10 === 0) {
     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
     logAverageFrame(timesToUpdatePosition);
