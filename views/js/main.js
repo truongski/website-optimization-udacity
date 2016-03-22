@@ -404,15 +404,16 @@ var resizePizzas = function (size) {
 
     // Changes the value for the size of the pizza above the slider
     function changeSliderLabel(size) {
+        var pizzaSize = document.getElementById("pizzaSize");
         switch (size) {
             case "1":
-                document.querySelector("#pizzaSize").innerHTML = "Small";
+                pizzaSize.innerHTML = "Small";
                 return;
             case "2":
-                document.querySelector("#pizzaSize").innerHTML = "Medium";
+                pizzaSize.innerHTML = "Medium";
                 return;
             case "3":
-                document.querySelector("#pizzaSize").innerHTML = "Large";
+                pizzaSize.innerHTML = "Large";
                 return;
             default:
                 console.log("bug in changeSliderLabel");
@@ -449,9 +450,9 @@ var resizePizzas = function (size) {
     // Iterates through pizza elements on the page and changes their widths
     function changePizzaSizes(size) {
         // Cache pizza container and offset widths once instead of getting it every iteration.
-        var windowWidth = document.querySelector("#randomPizzas").offsetWidth;
-        var oldWidth = document.querySelectorAll(".randomPizzaContainer")[0].offsetWidth;
-        var randomPizzaContainer = document.querySelectorAll(".randomPizzaContainer");
+        var windowWidth = document.getElementById("randomPizzas").offsetWidth;
+        var randomPizzaContainer = document.getElementsByClassName("randomPizzaContainer");
+        var oldWidth = randomPizzaContainer[0].offsetWidth;
         for (var i = 0; i < randomPizzaContainer.length; i++) {
             var dx = determineDx(randomPizzaContainer, size, oldWidth, windowWidth);
             var newwidth = (oldWidth + dx) + 'px';
@@ -528,7 +529,7 @@ function updatePositions() {
     frame++;
     window.performance.mark("mark_start_frame");
 
-    var items = document.querySelectorAll('.mover');
+    var items = document.getElementsByClassName('mover');
     // Cache document.body.scrollTop once instead of getting it every iteration.
     var scrollTop = (document.body.scrollTop / 1250);
     for (var i = 0; i < items.length; i++) {
@@ -562,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
         elem.style.width = "73.333px";
         elem.basicLeft = (i % cols) * s;
         elem.style.top = (Math.floor(i / cols) * s) + 'px';
-        document.querySelector("#movingPizzas1").appendChild(elem);
+        document.getElementById("movingPizzas1").appendChild(elem);
     }
     updatePositions();
 });
