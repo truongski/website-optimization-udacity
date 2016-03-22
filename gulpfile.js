@@ -6,6 +6,7 @@ Click here to learn more. http://go.microsoft.com/fwlink/?LinkId=518007
 var gulp = require('gulp');
 var uglify = require('gulp-uglify');
 var uglifycss = require('gulp-uglifycss');
+var minifyhtml = require('gulp-minify-html');
 
 gulp.task('js', function () {
     gulp.src('js/*.js')
@@ -27,18 +28,22 @@ gulp.task('css', function () {
         .pipe(gulp.dest('dist/views/css'));
 });
 
-gulp.task('dist', function () {
-    gulp.src('views/*.html')
-        .pipe(gulp.dest('dist/views'));
-
+gulp.task('images', function () {
     gulp.src('views/images/**/*')
         .pipe(gulp.dest('dist/views/images'));
-
-    gulp.src('*.html')
-        .pipe(gulp.dest('dist'));
 
     gulp.src('img/**/*')
         .pipe(gulp.dest('dist/img'));
 });
 
-gulp.task('default', ['js', 'css', 'dist']);
+gulp.task('html', function () {
+    gulp.src('views/*.html')
+        .pipe(minifyhtml())
+        .pipe(gulp.dest('dist/views'));
+
+    gulp.src('*.html')
+        .pipe(minifyhtml())
+        .pipe(gulp.dest('dist'));
+});
+
+gulp.task('default', ['js', 'css', 'images', 'html']);
