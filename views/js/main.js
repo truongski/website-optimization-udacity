@@ -535,9 +535,13 @@ function updatePositions() {
     var items = document.getElementsByClassName('mover');
     // Cache document.body.scrollTop once instead of getting it every iteration.
     var scrollTop = (document.body.scrollTop / 1250);
+    var phases = [];
+    for (var phaseNumber = 0; phaseNumber < 5; phaseNumber++) {
+        phases[phaseNumber] = lookupSine(scrollTop + phaseNumber);
+    }
+
     for (var i = 0; i < items.length; i++) {
-        var phase = lookupSine(scrollTop + (i % 5));
-        items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+        items[i].style.left = items[i].basicLeft + 100 * phases[(i % 5)] + 'px';
     }
 
     // User Timing API to the rescue again. Seriously, it's worth learning.
